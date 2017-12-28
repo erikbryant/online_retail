@@ -2,30 +2,48 @@ import csv
 
 import matplotlib.pyplot as plt
 
-y = []
-c = []
-i = 0
 
-# "InvoiceNo","StockCode","Description","Quantity","InvoiceDate","UnitPrice","CustomerID","Country"
-with open('clean_online_retail.csv', newline='') as csvfile:
-    reader = csv.DictReader(csvfile)
-    for row in reader:
-        i += 1
-        if i > 100:
-            break
-        quantity = float(row['Quantity'])
-        unitprice = float(row['UnitPrice'])
-        if row['InvoiceNo'][0] == 'C':
-            continue
-        if quantity < 0:
-            continue
-        if quantity > 10000:
-            continue
-        y.append(quantity)
-        c.append(quantity * unitprice)
+def plot(points):
+    plt.plot(range(len(points)), points)
 
-x = range(len(y))
-print("len = %s" % len(y))
-plt.plot(x, y)
-plt.plot(x, c)
-plt.show()
+
+def load(start=0, count=500):
+    rows = []
+    i = -1
+
+    # "InvoiceNo","StockCode","Description","Quantity","InvoiceDate","UnitPrice","CustomerID","Country"
+    with open('clean_online_retail.csv', newline='') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            i += 1
+            if i < start:
+                continue
+            if i > start + count:
+                break
+            row['Quantity'] = float(row['Quantity'])
+            row['UnitPrice'] = float(row['UnitPrice'])
+            if row['InvoiceNo'][0] == 'C':  # Cancellations
+                continue
+            if row['Quantity'] < 0:  # Damaged goods
+                continue
+            if row['Quantity'] > 10000:  # Outliers
+                continue
+            rows.append(row)
+    return rows
+
+
+def main():
+    rows = load()
+    quantity = []
+    unit_price = []
+
+    for row in rows:
+        quantity.append(row['Quantity'])
+        unit_price.append(row['UnitPrice'])
+
+    plot(quantity)
+    plot(unit_price)
+    plt.show()
+
+
+main()
