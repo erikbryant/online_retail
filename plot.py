@@ -7,7 +7,7 @@ def plot(points):
     plt.plot(range(len(points)), points)
 
 
-def load(start=0, count=500):
+def load(start=0, count=100):
     rows = []
     i = -1
 
@@ -33,7 +33,7 @@ def load(start=0, count=500):
 
 
 def main():
-    rows = load()
+    rows = load(0, 1000)
     quantity = []
     unit_price = []
 
@@ -41,8 +41,8 @@ def main():
         quantity.append(row['Quantity'])
         unit_price.append(row['UnitPrice'])
 
-    plot(quantity)
-    plot(unit_price)
+    plot(quantity[:500])
+    plot(unit_price[:500])
     plt.show()
 
 
