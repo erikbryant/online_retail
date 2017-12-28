@@ -34,6 +34,32 @@ def load(start=0, count=100):
 
 def main():
     rows = load(0, 1000)
+
+    # Generate statistics about the data we loaded.
+    invoice_no = set()
+    stock_code = set()
+    description = set()
+    quantity = set()
+    customer_id = set()
+    country = set()
+    for row in rows:
+        # "InvoiceNo","StockCode","Description","Quantity","InvoiceDate","UnitPrice","CustomerID","Country"
+        invoice_no.add(row['InvoiceNo'])
+        stock_code.add(row['StockCode'])
+        description.add(row['Description'])
+        quantity.add(row['Quantity'])
+        customer_id.add(row['CustomerID'])
+        country.add(row['Country'])
+    print("Dataset Statistics")
+    print("  Rows: %d" % len(rows))
+    print("  Unique InvoiceNo  : %d" % len(invoice_no))
+    print("  Unique StockCode  : %d" % len(stock_code))
+    print("  Unique Description: %d" % len(description))
+    print("  Unique Quantity   : %d" % len(quantity))
+    print("  Unique CustomerID : %d" % len(customer_id))
+    print("  Unique Country    : %d" % len(country))
+    print("  Items per Invoice : %.2f" % (len(rows) / len(invoice_no)))
+
     quantity = []
     unit_price = []
 
