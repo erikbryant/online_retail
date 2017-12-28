@@ -3,10 +3,6 @@ import csv
 import matplotlib.pyplot as plt
 
 
-def plot(points):
-    plt.plot(range(len(points)), points)
-
-
 def load(start=0, count=100):
     rows = []
     i = -1
@@ -21,7 +17,7 @@ def load(start=0, count=100):
             if i > start + count:
                 break
             row['Quantity'] = float(row['Quantity'])
-            row['UnitPrice'] = float(row['UnitPrice'])
+            row['UnitPrice'] = float(row['UnitPrice']) * 1.606  # Pounds Sterling -> USD
             if row['InvoiceNo'][0] == 'C':  # Cancellations
                 continue
             if row['Quantity'] < 0:  # Damaged goods
@@ -42,6 +38,7 @@ def main():
     quantity = set()
     customer_id = set()
     country = set()
+    total_cost = 0
     for row in rows:
         # "InvoiceNo","StockCode","Description","Quantity","InvoiceDate","UnitPrice","CustomerID","Country"
         invoice_no.add(row['InvoiceNo'])
@@ -50,6 +47,7 @@ def main():
         quantity.add(row['Quantity'])
         customer_id.add(row['CustomerID'])
         country.add(row['Country'])
+        total_cost += row['Quantity'] * row['UnitPrice']
     print("Dataset Statistics")
     print("  Rows: %d" % len(rows))
     print("  Unique InvoiceNo  : %d" % len(invoice_no))
@@ -59,6 +57,7 @@ def main():
     print("  Unique CustomerID : %d" % len(customer_id))
     print("  Unique Country    : %d" % len(country))
     print("  Items per Invoice : %.2f" % (len(rows) / len(invoice_no)))
+    print("  Average Invoice $ : %.2f" % (total_cost / len(invoice_no)))
 
     quantity = []
     unit_price = []
@@ -67,8 +66,14 @@ def main():
         quantity.append(row['Quantity'])
         unit_price.append(row['UnitPrice'])
 
-    plot(quantity[:500])
-    plot(unit_price[:500])
+    plt.subplot(2, 1, 1)
+    plt.plot(range(len(quantity)), quantity)
+    plt.ylabel("Quantity")
+
+    plt.subplot(2, 1, 2)
+    plt.plot(range(len(unit_price)), unit_price)
+    plt.ylabel("Unit Price")
+
     plt.show()
 
 
