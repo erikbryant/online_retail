@@ -1,6 +1,7 @@
 import csv
 
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 def load(start=0, count=100):
@@ -24,12 +25,14 @@ def load(start=0, count=100):
                 continue
             if row['Quantity'] > 10000:  # Outliers
                 continue
+            if row['UnitPrice'] < 0:
+                continue
             rows.append(row)
     return rows
 
 
 def main():
-    rows = load(0, 1000)
+    rows = load(0, 1000000)
 
     # Generate statistics about the data we loaded.
     invoice_no = set()
@@ -66,11 +69,25 @@ def main():
         quantity.append(row['Quantity'])
         unit_price.append(row['UnitPrice'])
 
-    plt.subplot(2, 1, 1)
+    q = np.array(sorted(quantity))
+    print("\nNumPy")
+    print("  Quantity count : %d" % len(q))
+    print("           min   : %d" % q[0])
+    print("           max   : %d" % q[-1])
+    print("           mean  : %.2f" % q.mean())
+    print("           median: %d" % q[len(q) >> 1])
+    print("           std   : %.2f" % q.std())
+    print("           var   : %.2f" % q.var())
+
+    plt.subplot(3, 1, 1)
     plt.plot(range(len(quantity)), quantity)
     plt.ylabel("Quantity")
 
-    plt.subplot(2, 1, 2)
+    plt.subplot(3, 1, 2)
+    plt.plot(range(len(quantity)), sorted(quantity))
+    plt.ylabel("Quantity (sorted)")
+
+    plt.subplot(3, 1, 3)
     plt.plot(range(len(unit_price)), unit_price)
     plt.ylabel("Unit Price")
 
