@@ -27,6 +27,8 @@ def load(start=0, count=100):
                 continue
             if row['UnitPrice'] < 0:
                 continue
+            if row['UnitPrice'] > 1000:  # Outliers
+                continue
             rows.append(row)
     return rows
 
@@ -79,17 +81,31 @@ def main():
     print("           std   : %.2f" % q.std())
     print("           var   : %.2f" % q.var())
 
-    plt.subplot(3, 1, 1)
+    up = np.array(sorted(unit_price))
+    print("\nNumPy")
+    print("  UnitPrice count : %d" % len(up))
+    print("            min   : %.2f" % up[0])
+    print("            max   : %.2f" % up[-1])
+    print("            mean  : %.2f" % up.mean())
+    print("            median: %.2f" % up[len(up) >> 1])
+    print("            std   : %.2f" % up.std())
+    print("            var   : %.2f" % up.var())
+
+    plt.subplot(2, 2, 1)
     plt.plot(range(len(quantity)), quantity)
     plt.ylabel("Quantity")
 
-    plt.subplot(3, 1, 2)
+    plt.subplot(2, 2, 2)
     plt.plot(range(len(quantity)), sorted(quantity))
     plt.ylabel("Quantity (sorted)")
 
-    plt.subplot(3, 1, 3)
+    plt.subplot(2, 2, 3)
     plt.plot(range(len(unit_price)), unit_price)
     plt.ylabel("Unit Price")
+
+    plt.subplot(2, 2, 4)
+    plt.plot(range(len(unit_price)), sorted(unit_price))
+    plt.ylabel("Unit Price (sorted)")
 
     plt.show()
 
