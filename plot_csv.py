@@ -18,7 +18,7 @@ def load(start=0, count=100):
             if i > start + count:
                 break
             row['Quantity'] = float(row['Quantity'])
-            row['UnitPrice'] = float(row['UnitPrice']) * 1.606  # Pounds Sterling -> USD
+            row['UnitPrice'] = float(row['UnitPrice'])
             if row['InvoiceNo'][0] == 'C':  # Cancellations
                 continue
             if row['Quantity'] < 0:  # Damaged goods
