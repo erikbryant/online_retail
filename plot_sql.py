@@ -85,6 +85,7 @@ def main():
         plt.plot(range(len(data)), sorted(data))
         plt.ylabel("%s (sorted)" % labels[i])
 
+    plt.subplots_adjust(wspace = 0.35)
     plt.show()
 
 

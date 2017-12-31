@@ -107,6 +107,8 @@ def main():
     plt.plot(range(len(unit_price)), sorted(unit_price))
     plt.ylabel("Unit Price (sorted)")
 
+    plt.subplots_adjust(wspace = 0.35)
+
     plt.show()
 
 
